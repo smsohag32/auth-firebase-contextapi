@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../providers/AuthProviders";
+import Swal from "sweetalert2";
 
 const Register = () => {
+  const { userRegister, setUser } = useContext(AuthContext);
   // form submit
   const handleRegister = (event) => {
     // page not to be refresh
@@ -12,16 +15,27 @@ const Register = () => {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    console.log(email, password, name);
+    userRegister(email, password)
+      .then((result) => {
+        const loggedUser = result.user;
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Account created successful",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((error) => console.log(error.message));
     // reset form
     event.target.reset();
   };
 
   return (
-    <div className="hero min-h-screen bg-base-200">
-      <div className="hero-content flex-col lg:flex-row-reverse">
+    <div className="hero min-h-[80vh] bg-base-200">
+      <div className="hero-content flex-col">
         <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Login now!</h1>
+          <h1 className="text-5xl font-bold">Register!</h1>
         </div>
         <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
           {/* form */}

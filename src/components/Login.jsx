@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../providers/AuthProviders";
 
 const Login = () => {
+  const { singIn, setUser } = useContext(AuthContext);
   // form submit
   const handleLogin = (event) => {
     // page not to be refresh
@@ -11,13 +13,20 @@ const Login = () => {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    console.log(email, password);
+    singIn(email, password)
+      .then((result) => {
+        const loggedUser = result.user;
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
     // reset form
     event.target.reset();
   };
+  const handleResetPassword = () => {};
   return (
-    <div className="hero min-h-screen bg-base-200">
-      <div className="hero-content flex-col lg:flex-row-reverse">
+    <div className="hero min-h-[80vh] bg-base-200">
+      <div className="hero-content flex-col">
         <div className="text-center lg:text-left">
           <h1 className="text-5xl font-bold">Login now!</h1>
         </div>
@@ -33,6 +42,7 @@ const Login = () => {
                 name="email"
                 placeholder="email"
                 className="input input-bordered"
+                required
               />
             </div>
             <div className="form-control">
@@ -44,9 +54,13 @@ const Login = () => {
                 name="password"
                 placeholder="password"
                 className="input input-bordered"
+                required
               />
               <label className="label">
-                <a href="#" className="label-text-alt link link-info">
+                <a
+                  onClick={handleResetPassword}
+                  className="label-text-alt link link-info"
+                >
                   Forgot password?
                 </a>
               </label>
