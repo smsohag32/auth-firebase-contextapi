@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProviders";
 
 const Login = () => {
-  const { singIn, setUser } = useContext(AuthContext);
+  const { singIn, setUser, singInGoggle } = useContext(AuthContext);
   // form submit
   const handleLogin = (event) => {
     // page not to be refresh
@@ -22,6 +22,15 @@ const Login = () => {
       });
     // reset form
     event.target.reset();
+  };
+  const handleGoggleLogin = () => {
+    singInGoggle()
+      .then((result) => {
+        const loggedUser = result.user;
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
   const handleResetPassword = () => {};
   return (
@@ -56,6 +65,9 @@ const Login = () => {
                 className="input input-bordered"
                 required
               />
+              <button onClick={handleGoggleLogin} className="btn btn-outline">
+                Login with Goggle
+              </button>
               <label className="label">
                 <a
                   onClick={handleResetPassword}
